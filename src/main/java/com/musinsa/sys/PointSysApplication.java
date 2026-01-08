@@ -1,11 +1,10 @@
-package com.musinsa.point;
+package com.musinsa.sys;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class PointSysApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(PointSysApplication.class, args);
 	}
