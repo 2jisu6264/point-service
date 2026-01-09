@@ -19,9 +19,6 @@ public class PointSavingApprovalReq  {
 	@NotNull
 	private Long memberId;
 
-	@NotNull(message = "거래구분코드를 입력하세요.")
-	private PointLogType logType;
-
 	@NotNull(message = "지급 유형값을 입력하세요.")
 	private WalletSourceType sourceType;
 

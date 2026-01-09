@@ -1,4 +1,4 @@
-package com.musinsa.sys.common;
+package com.musinsa.sys.common.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

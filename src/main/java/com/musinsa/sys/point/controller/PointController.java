@@ -1,9 +1,10 @@
 package com.musinsa.sys.point.controller;
 
-import com.musinsa.sys.common.ProcessResult;
-import com.musinsa.sys.common.ResultProcess;
+import com.musinsa.sys.common.dto.ProcessResult;
+import com.musinsa.sys.common.dto.ResultProcess;
 import com.musinsa.sys.point.dto.PointResp;
 import com.musinsa.sys.point.dto.PointSavingApprovalReq;
+import com.musinsa.sys.point.dto.PointSavingCancelReq;
 import com.musinsa.sys.point.service.PointService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -29,6 +30,15 @@ public class PointController {
 
         return ResultProcess.convertTo(pointSavingApprovalResp);
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/saving/cancel", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ProcessResult<PointResp> pointSavingApproval(HttpServletRequest request, @Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) throws Exception {
+
+        PointResp pointResp = pointService.savingCancel(pointSavingCancelReq);
+
+        return ResultProcess.convertTo(pointResp);
+    }
+
 /*    @RequestMapping(method = RequestMethod.POST, value = "/expire")
     public ProcessResult<PointExpireResp> pointExpire(HttpServletRequest request, @Valid @RequestBody PointExpireReq pointExpireReq) throws Exception {
 

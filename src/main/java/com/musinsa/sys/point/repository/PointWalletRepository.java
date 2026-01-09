@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface PointWalletRepository extends JpaRepository<PointWallet, Long> {
-    PointWallet findByWalletId(Long walletId);
+    PointWallet findByMemberIdAndWalletId(Long memberId, Long walletId);
 }
 

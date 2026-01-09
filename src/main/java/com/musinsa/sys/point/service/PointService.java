@@ -36,19 +36,18 @@ public class PointService {
 
         PointResp pointResp = new PointResp();
         PointWallet pointWallet = new PointWallet();
+
         PointLog pointLog = new PointLog();
         Member member;
-        String orderNo;
+
+        Long memberId = pointSavingApprovalReq.getMemberId();
+        Long amount = pointSavingApprovalReq.getAmount();
 
         //거래구분코드 확인
-        if (!pointSavingApprovalReq.getLogType().equals(PointLogType.SAVING_APPROVAL)) {
-            throw new ServiceException("HCO001");
-        } else {
-            pointLog.setLogType(PointLogType.SAVING_APPROVAL);
-        }
+        pointLog.setLogType(PointLogType.SAVING_APPROVAL);
 
         //회원 여부 확인
-        member = memberRepository.findByMemberId(pointSavingApprovalReq.getMemberId());
+        member = memberRepository.findByMemberIdForUpdate(memberId);
         if (member == null) {
             throw new ServiceException("HMB001");
         } else {
@@ -56,11 +55,11 @@ public class PointService {
         }
 
         //한도체크 ( 1회 충전금액, 총보유금액, 만료일)
-        validateSavingAmount(pointSavingApprovalReq.getAmount());
-        validateBalanceLimit(member.getPointBalance(), pointSavingApprovalReq.getAmount());
+        validateSavingAmount(amount);
+        validateBalanceLimit(member.getPointBalance(),amount);
         validateExpireDate(pointSavingApprovalReq.getExpireDate());
 
-        pointLog.setAmount(pointSavingApprovalReq.getAmount());
+        pointLog.setAmount(amount);
         pointLog.setLogAt(pointSavingApprovalReq.getLogAt());
 
         //주문번호 체크
@@ -70,11 +69,11 @@ public class PointService {
 
         pointLogRepository.save(pointLog);
 
-        Long totalBalance = member.getPointBalance() + pointSavingApprovalReq.getAmount();
+        Long totalBalance = member.getPointBalance() + amount;
         member.setPointBalance(totalBalance);
 
         memberRepository.save(member);
-        pointWallet.setMemberId(pointSavingApprovalReq.getMemberId());
+        pointWallet.setMemberId(memberId);
         pointWallet.setWalletStatus("00");
         pointWallet.setSourceType(pointSavingApprovalReq.getSourceType());
         pointWallet.setIssuedAmount(pointSavingApprovalReq.getAmount());
@@ -84,6 +83,9 @@ public class PointService {
         pointWallet.setCreatedAt(LocalDateTime.now().withNano(0));
         pointWalletRepository.save(pointWallet);
 
+        pointResp.setMemberId(memberId);
+        pointResp.setWalletId(pointWallet.getWalletId());
+        pointResp.setAmount(amount);
         return pointResp;
     }
 
@@ -94,23 +96,23 @@ public class PointService {
         PointLog pointLog = new PointLog();
         Member member;
 
-        //거래구분코드 확인
-        if (!pointSavingCancelReq.getLogType().equals("SC")) {
-            throw new ServiceException("HCO001");
-        } else {
-            pointLog.setLogType(PointLogType.SAVING_CANCEL);
-        }
+        Long memberId = pointSavingCancelReq.getMemberId();
+        Long amount = pointSavingCancelReq.getAmount();
+        Long walletId = pointSavingCancelReq.getWalletId();
+
+        //거래구분코드
+        pointLog.setLogType(PointLogType.SAVING_CANCEL);
 
         //회원 여부 확인
-        member = memberRepository.findByMemberId(pointSavingCancelReq.getMemberId());
+        member = memberRepository.findByMemberIdForUpdate(memberId);
         if (member == null) {
             throw new ServiceException("HMB001");
         } else {
-            pointLog.setMemberId(member.getMemberId());
+            pointLog.setMemberId(memberId);
         }
 
         //취소할 거래 조회 (세분화)
-        PointWallet cancelWallet = pointWalletRepository.findByWalletId(pointSavingCancelReq.getWalletId());
+        PointWallet cancelWallet = pointWalletRepository.findByMemberIdAndWalletId(memberId, walletId);
         if (cancelWallet == null) {
             throw new ServiceException("HCO006");
         } else if (cancelWallet.getUsedAmount() > 0) {
@@ -119,22 +121,27 @@ public class PointService {
             throw new ServiceException("HCO009");
         }
 
-        pointLog.setAmount(pointSavingCancelReq.getAmount());
+        pointLog.setAmount(amount);
         pointLog.setLogAt(pointSavingCancelReq.getLogAt());
         pointLog.setCreatedAt(LocalDateTime.now().withNano(0));
 
         pointLogRepository.save(pointLog);
 
-        if (member.getPointBalance() < pointSavingCancelReq.getAmount()) {
+        if (member.getPointBalance() < amount) {
             throw new ServiceException("HCO010");
         }
-        Long totalBalance = member.getPointBalance() - pointSavingCancelReq.getAmount();
+
+        Long totalBalance = member.getPointBalance() - amount;
         member.setPointBalance(totalBalance);
 
         memberRepository.save(member);
+
         cancelWallet.setWalletStatus("10");
         pointWalletRepository.save(cancelWallet);
 
+        pointResp.setMemberId(memberId);
+        pointResp.setWalletId(walletId);
+        pointResp.setAmount(walletId);
         return pointResp;
     }
 /*

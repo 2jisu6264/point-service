@@ -1,4 +1,6 @@
-package com.musinsa.sys.common;
+package com.musinsa.sys.common.dto;
+
+import com.musinsa.sys.common.ProcessCode;
 
 import java.util.Map;
 import java.util.Optional;
