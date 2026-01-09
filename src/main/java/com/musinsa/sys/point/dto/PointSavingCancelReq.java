@@ -1,34 +1,35 @@
 package com.musinsa.sys.point.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.musinsa.sys.point.domain.PointLogType;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class PointSavingCancelReq  {
 
-	@NotNull(message = "이용사고유값이 비어있습니다.")
-	private Long uscoSno;
+	@NotNull
+	private Long memberId;
 
-	@NotNull(message = "가맹점고유값이 비어있습니다.")
-	private Long mrstSno;
+	@NotNull
+	private PointLogType logType;
 
-	private String mbtlNo;
+	@NotNull
+	private Long amount;
 
-	private Long mbrSno;
+	@NotNull
+	private Long walletId;
 
-	@NotNull(message = "요청금액값이 비어있습니다.")
-	private Long rqsAmt;
+	@NotNull
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime logAt;
 
-	@NotNull(message = "처리금액값이 비어있습니다.")
-	private Long pcsAmt;
-
-	private String ogtrAprvNo;
-	private String ogtrDt;
-	private String ogtrTm;
-
-	private String cnclDscd;    // 취소구분 코드
-
-	private String trDt;
-	private String trTm;
-	private String trAprvNo;
+	@NotNull
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime originalLogAt;
 }

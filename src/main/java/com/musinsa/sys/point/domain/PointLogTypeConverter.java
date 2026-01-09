@@ -1,5 +1,4 @@
 package com.musinsa.sys.point.domain;
-import com.musinsa.sys.point.domain.PointLogType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

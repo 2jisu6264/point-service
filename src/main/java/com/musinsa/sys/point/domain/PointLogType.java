@@ -1,7 +1,10 @@
 package com.musinsa.sys.point.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -22,11 +25,17 @@ public enum PointLogType {
             Arrays.stream(values())
                     .collect(Collectors.toMap(PointLogType::getCode, v -> v));
 
+    @JsonCreator
     public static PointLogType from(String code) {
         PointLogType type = CODE_MAP.get(code);
         if (type == null) {
-            throw new IllegalArgumentException("Invalid PointLogType: " + code);
+            throw new ServiceException("HCO011");
         }
         return type;
+    }
+
+    @JsonValue
+    public String getCode() {
+        return code;
     }
 }

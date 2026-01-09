@@ -10,12 +10,5 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PointPolicyService {
-    private final PointPolicyRepository policyRepository;
-
-    public long getValue(String key) {
-        return policyRepository.findByPolicyKey(key)
-                .orElseThrow(() -> new ServiceException("HCO999"))
-                .getPolicyValue();
-    }
 
 }

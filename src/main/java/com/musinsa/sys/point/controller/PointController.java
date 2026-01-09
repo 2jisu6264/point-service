@@ -2,14 +2,11 @@ package com.musinsa.sys.point.controller;
 
 import com.musinsa.sys.common.ProcessResult;
 import com.musinsa.sys.common.ResultProcess;
-import com.musinsa.sys.point.dto.PointExpireReq;
-import com.musinsa.sys.point.dto.PointExpireResp;
 import com.musinsa.sys.point.dto.PointResp;
 import com.musinsa.sys.point.dto.PointSavingApprovalReq;
 import com.musinsa.sys.point.service.PointService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("point")
 public class PointController {
+    private final PointService pointService;
 
-    @Autowired
-    private PointService pointService;
-    
+    public PointController(PointService pointService) {
+        this.pointService = pointService;
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/saving/approval", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ProcessResult<PointResp> pointSavingApproval(HttpServletRequest request, @Valid @RequestBody PointSavingApprovalReq pointSavingApprovalReq) throws Exception {
 
