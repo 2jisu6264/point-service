@@ -3,7 +3,7 @@ package com.musinsa.sys.common.exception;
 import lombok.Getter;
 
 @Getter
-public class ServiceException extends Exception {
+public class ServiceException extends RuntimeException {
 
     private static final long serialVersionUID = 4577337814375765407L;
 
