@@ -25,10 +25,8 @@ public class Member {
     @Column(name = "point_balance")
     private Long pointBalance;
 
-    @Column(name = "created_date", nullable = false, length = 8)
+    @Column(name = "created_at", nullable = false, length = 8)
     private String createdDate;
 
-    @Column(name = "created_time", nullable = false, length = 6)
-    private String createdTime;
 
 }

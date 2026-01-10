@@ -37,6 +37,10 @@ public class PointWallet {
     @Column(name = "expire_date", length = 8, nullable = false)
     private LocalDate expireDate;
 
+    @Convert(converter = WalletSourceTypeConverter.class)
+    @Column(name = "source_type", nullable = false)
+    private WalletSourceType sourceType;
+
     @Column(name = "created_at", length = 8, nullable = false)
     private LocalDateTime createdAt;
 

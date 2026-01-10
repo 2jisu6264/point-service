@@ -4,10 +4,10 @@ import com.musinsa.sys.common.dto.ProcessResult;
 import com.musinsa.sys.common.enums.ProcessCode;
 import com.musinsa.sys.point.dto.PointResp;
 import com.musinsa.sys.point.dto.PointSavingApprovalReq;
+import com.musinsa.sys.point.dto.PointSavingCancelReq;
 import com.musinsa.sys.point.service.PointService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("point")
 public class PointController {
+    private final PointService pointService;
 
-    @Autowired
-    private PointService pointService;
+    public PointController(PointService pointService) {
+        this.pointService = pointService;
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saving/approval", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ProcessResult<PointResp> pointSavingApproval(HttpServletRequest request, @Valid @RequestBody PointSavingApprovalReq pointSavingApprovalReq) throws Exception {
@@ -27,6 +29,29 @@ public class PointController {
         ProcessResult<PointResp> processResult = new ProcessResult<>(pointSavingApprovalResp, ProcessCode.HCO001.getProcCd());
         return processResult;
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/saving/cancel", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ProcessResult<PointResp> pointSavingApproval(HttpServletRequest request, @Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) throws Exception {
+
+        PointResp pointResp = pointService.savingCancel(pointSavingCancelReq);
+
+        return ResultProcess.convertTo(pointResp);
+    }
+    @RequestMapping(method = RequestMethod.POST, value = "/use/approval", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ProcessResult<PointResp> pointUseApproval(HttpServletRequest request, @Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) throws Exception {
+
+        PointResp pointResp = pointService.savingCancel(pointSavingCancelReq);
+
+        return ResultProcess.convertTo(pointResp);
+    }
+    @RequestMapping(method = RequestMethod.POST, value = "/use/cancel", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ProcessResult<PointResp> pointUseCancel(HttpServletRequest request, @Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) throws Exception {
+
+        PointResp pointResp = pointService.savingCancel(pointSavingCancelReq);
+
+        return ResultProcess.convertTo(pointResp);
+    }
+
 /*    @RequestMapping(method = RequestMethod.POST, value = "/expire")
     public ProcessResult<PointExpireResp> pointExpire(HttpServletRequest request, @Valid @RequestBody PointExpireReq pointExpireReq) throws Exception {
 

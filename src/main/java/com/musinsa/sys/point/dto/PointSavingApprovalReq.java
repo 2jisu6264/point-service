@@ -2,6 +2,7 @@ package com.musinsa.sys.point.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.musinsa.sys.point.enums.PointLogType;
+import com.musinsa.sys.point.domain.WalletSourceType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -18,15 +19,10 @@ public class PointSavingApprovalReq  {
 	@NotNull
 	private Long memberId;
 
-	@NotBlank
-	@Size(max = 2)
-	private PointLogType logType;
+	@NotNull(message = "지급 유형값을 입력하세요.")
+	private WalletSourceType sourceType;
 
-	@NotBlank
-	@Size(max = 20)
-	private String storeNo;
-
-	@NotNull
+	@NotNull(message = "거래금액을 입력하세요.")
 	private Long amount;
 
 	@NotNull
@@ -35,6 +31,7 @@ public class PointSavingApprovalReq  {
 	)
 	private LocalDateTime logAt;
 
+	@NotNull(message = "포인트만료일을 입력하세요.")
 	@JsonFormat(pattern = "yyyyMMdd")
 	private LocalDate  expireDate;
 }

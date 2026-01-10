@@ -25,28 +25,13 @@ public class PointLog {
     private PointLogType logType;
 
     @Column(name = "log_at", length = 8, nullable = false)
-    private String logAt;
+    private LocalDateTime logAt;
 
-    @Column(name = "order_no", length = 20, nullable = false)
+    @Column(name = "order_no", length = 20)
     private String orderNo;
 
-    @Column(name = "issued_amount", nullable = false)
-    private Long issuedAmount;
-
-    @Column(name = "cancel_type", length = 1)
-    private String cancelType;
-
-    @Column(name = "original_log_id")
-    private Long originalLogId;
-
-    @Column(name = "original_log_at", length = 8)
-    private String originalLogAt;
-
-    @Column(name = "cancel_log_id")
-    private Long cancelLogId;
-
-    @Column(name = "cancel_log_at", length = 8)
-    private String cancelLogAt;
+    @Column(name = "amount", nullable = false)
+    private Long amount;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
