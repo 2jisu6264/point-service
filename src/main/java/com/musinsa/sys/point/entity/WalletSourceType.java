@@ -1,10 +1,9 @@
-package com.musinsa.sys.point.domain;
+package com.musinsa.sys.point.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.service.spi.ServiceException;
 
 @Getter
 @RequiredArgsConstructor

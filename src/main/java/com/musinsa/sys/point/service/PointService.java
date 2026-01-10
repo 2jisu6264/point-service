@@ -1,10 +1,17 @@
 package com.musinsa.sys.point.service;
 
-import com.musinsa.sys.common.sequence.OrderNoGenerator;
-import com.musinsa.sys.member.domain.Member;
+import com.musinsa.sys.common.enums.ProcessCode;
+import com.musinsa.sys.common.util.StringUtil;
+import com.musinsa.sys.member.entity.Member;
 import com.musinsa.sys.member.repository.MemberRepository;
-import com.musinsa.sys.point.domain.*;
+import com.musinsa.sys.order.component.OrderNoGenerator;
 import com.musinsa.sys.point.dto.*;
+import com.musinsa.sys.point.entity.PointLog;
+import com.musinsa.sys.point.entity.PointPolicy;
+import com.musinsa.sys.point.entity.PointUseDetail;
+import com.musinsa.sys.point.entity.PointWallet;
+import com.musinsa.sys.point.enums.PointLogType;
+import com.musinsa.sys.point.enums.PointPolicyKey;
 import com.musinsa.sys.point.repository.PointLogRepository;
 import com.musinsa.sys.point.repository.PointPolicyRepository;
 import com.musinsa.sys.point.repository.PointUseDetailRepository;
@@ -31,6 +38,7 @@ public class PointService {
     private final OrderNoGenerator orderNoGenerator;
     private final MemberRepository memberRepository;
     private final PointUseDetailRepository pointUseDetailRepository;
+
     @Transactional
     public PointResp savingApproval(PointSavingApprovalReq pointSavingApprovalReq) throws Exception {
 
@@ -56,7 +64,7 @@ public class PointService {
 
         //한도체크 ( 1회 충전금액, 총보유금액, 만료일)
         validateSavingAmount(amount);
-        validateBalanceLimit(member.getPointBalance(),amount);
+        validateBalanceLimit(member.getPointBalance(), amount);
         validateExpireDate(pointSavingApprovalReq.getExpireDate());
 
         pointLog.setAmount(amount);
@@ -158,9 +166,10 @@ public class PointService {
         //거래구분코드
         pointLog.setLogType(PointLogType.USE_APPROVAL);
 
-        if(CommonLib.nullTrim(pointExpireReq.getTrDt()).equals("")){
-            hpptrLst.setTrDt(curDt);
-            hpptrLst.setTrTm(curTm);
+        //회원 여부 확인
+        member = memberRepository.findByMemberIdForUpdate(memberId);
+        if (member == null) {
+            throw new ServiceException("HMB001");
         } else {
             pointLog.setMemberId(memberId);
         }
@@ -196,6 +205,7 @@ public class PointService {
         pointResp.setAmount(totalBalance);
         return pointResp;
     }
+
     @Transactional
     public PointResp useCancel(PointUseCancelReq pointUseCancelReq) throws Exception {
 
@@ -285,6 +295,7 @@ public class PointService {
         }
         return expireDate;
     }
+
     public void usePoint(PointLog pointLog) throws Exception {
 
         Long useAmt = pointLog.getAmount(); // 사용금액

@@ -1,8 +1,7 @@
 package com.musinsa.sys.point.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.musinsa.sys.point.domain.WalletSourceType;
-import jakarta.validation.constraints.NotBlank;
+import com.musinsa.sys.point.entity.WalletSourceType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

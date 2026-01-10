@@ -1,4 +1,4 @@
-package com.musinsa.sys.point.domain;
+package com.musinsa.sys.point.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

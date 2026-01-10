@@ -25,31 +25,27 @@ public class PointController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/saving/approval", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ProcessResult<PointResp> pointSavingApproval(HttpServletRequest request, @Valid @RequestBody PointSavingApprovalReq pointSavingApprovalReq) throws Exception {
-        PointResp pointSavingApprovalResp = pointService.savingApproval(pointSavingApprovalReq);
-        ProcessResult<PointResp> processResult = new ProcessResult<>(pointSavingApprovalResp, ProcessCode.HCO001.getProcCd());
-        return processResult;
+        PointResp pointResp = pointService.savingApproval(pointSavingApprovalReq);
+        return new ProcessResult<>(pointResp, ProcessCode.HCO001.getProcCd());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saving/cancel", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ProcessResult<PointResp> pointSavingApproval(HttpServletRequest request, @Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) throws Exception {
 
         PointResp pointResp = pointService.savingCancel(pointSavingCancelReq);
-
-        return ResultProcess.convertTo(pointResp);
+        return new ProcessResult<>(pointResp, ProcessCode.HCO001.getProcCd());
     }
     @RequestMapping(method = RequestMethod.POST, value = "/use/approval", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ProcessResult<PointResp> pointUseApproval(HttpServletRequest request, @Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) throws Exception {
 
         PointResp pointResp = pointService.savingCancel(pointSavingCancelReq);
-
-        return ResultProcess.convertTo(pointResp);
+        return new ProcessResult<>(pointResp, ProcessCode.HCO001.getProcCd());
     }
     @RequestMapping(method = RequestMethod.POST, value = "/use/cancel", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ProcessResult<PointResp> pointUseCancel(HttpServletRequest request, @Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) throws Exception {
 
         PointResp pointResp = pointService.savingCancel(pointSavingCancelReq);
-
-        return ResultProcess.convertTo(pointResp);
+        return new ProcessResult<>(pointResp, ProcessCode.HCO001.getProcCd());
     }
 
 /*    @RequestMapping(method = RequestMethod.POST, value = "/expire")
