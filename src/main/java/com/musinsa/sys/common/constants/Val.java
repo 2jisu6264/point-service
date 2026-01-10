@@ -7,4 +7,7 @@ public class Val {
     * */
     public static String SUCCESS = "success";
     public static String FAIL = "fail";
+    public static String NORMAL = "00";
+    public static String CANCEL = "10";
+    public static String EXPIRED = "20";
 }

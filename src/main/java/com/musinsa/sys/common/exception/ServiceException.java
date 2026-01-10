@@ -5,9 +5,7 @@ import lombok.Getter;
 @Getter
 public class ServiceException extends RuntimeException {
 
-    private static final long serialVersionUID = 4577337814375765407L;
-
-    private String procCd;
+    private final String procCd;
 
     private String apnMsg;
 

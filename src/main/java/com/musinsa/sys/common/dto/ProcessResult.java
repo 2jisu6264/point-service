@@ -22,13 +22,5 @@ public class ProcessResult<D> {
         this.rsltObj = rsltObj;
     }
 
-    public ProcessResult(String sucsFalr, String rsltCd, String rsltMesg, D rsltObj) {
-        super();
-        this.sucsFalr = sucsFalr;
-        this.rsltCd = rsltCd;
-        this.rsltMesg = rsltMesg;
-        this.rsltObj = rsltObj;
-    }
-
 
 }

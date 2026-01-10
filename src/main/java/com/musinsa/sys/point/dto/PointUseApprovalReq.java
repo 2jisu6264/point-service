@@ -12,20 +12,14 @@ import java.time.LocalDateTime;
 @Data
 public class PointUseApprovalReq  {
 
-	@NotNull
-	private Long memberId;
+		@NotNull
+		private Long memberId;
 
-	@NotNull(message = "지급 유형값을 입력하세요.")
-	private WalletSourceType sourceType;
+		@NotNull(message = "거래금액을 입력하세요.")
+		private Long amount;
 
-	@NotNull(message = "거래금액을 입력하세요.")
-	private Long amount;
+		@NotNull(message = "날짜데이터를 입력하세요.")
+		@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+		private LocalDateTime logAt;
 
-	@NotNull(message = "날짜데이터를 입력하세요.")
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-	private LocalDateTime logAt;
-
-	@NotNull(message = "포인트만료일을 입력하세요.")
-	@JsonFormat(pattern = "yyyyMMdd")
-	private LocalDate expireDate;
 }

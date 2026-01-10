@@ -9,7 +9,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum WalletSourceType {
     MANUAL("MA"),
-    AUTOMATIC("AU");
+    AUTOMATIC("AU"),
+    RESAVING("RE");
 
     private final String code;
 

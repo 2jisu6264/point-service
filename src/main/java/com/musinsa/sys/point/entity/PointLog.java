@@ -20,9 +20,8 @@ public class PointLog {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Convert(converter = PointLogTypeConverter.class)
     @Column(name = "log_type", length = 2, nullable = false)
-    private PointLogType logType;
+    private String logType;
 
     @Column(name = "log_at", length = 8, nullable = false)
     private LocalDateTime logAt;

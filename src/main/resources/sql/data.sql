@@ -7,8 +7,8 @@ INSERT INTO member (
     point_balance,
     created_at
 ) VALUES
-      ('홍길동', 10000, '20260108'),
-      ('김철수', 5000,  '20260108');
+      ('홍길동', 0, '20260108'),
+      ('김철수', 10000,  '20260108');
 INSERT INTO order_sequence_log (
     order_date,
     seq,
@@ -16,3 +16,46 @@ INSERT INTO order_sequence_log (
 ) VALUES
       ('20250809', 0001,  CURRENT_TIMESTAMP),
       ('20250810', 0002,  CURRENT_TIMESTAMP);
+INSERT INTO point_wallet
+(
+    member_id,
+    issued_amount,
+    used_amount,
+    expired_amount,
+    wallet_status,
+    expire_date,
+    source_type,
+    created_at
+)
+VALUES
+    (
+        2,
+        10000,
+        0,
+        0,
+        '00',
+        '2026-12-31 23:59:59',
+        'MA',
+        CURRENT_TIMESTAMP
+    );
+
+INSERT INTO point_log
+(
+    member_id,
+    log_type,
+    log_at,
+    order_no,
+    amount,
+    created_at
+)
+VALUES
+    (
+        2,
+        'SA',
+        FORMATDATETIME(CURRENT_TIMESTAMP, 'yyyy-MM-dd''T''HH:mm:ss'),
+        NULL,
+        10000,
+        CURRENT_TIMESTAMP
+    );
+
+COMMIT;

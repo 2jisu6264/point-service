@@ -1,5 +1,7 @@
 package com.musinsa.sys.common.exception;
 
+import com.musinsa.sys.common.dto.ProcessResult;
+import com.musinsa.sys.common.enums.ProcessCode;
 import com.musinsa.sys.common.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("리소스를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<?> handleException(ServiceException ex) {
+        log.info(StringUtil.getStackTraceToString(ex));
+        return new ResponseEntity<>(new ProcessResult<>(null, ex.getProcCd()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     // 그 외의 일반적인 예외 처리
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception ex) {
-        log.debug(StringUtil.getStackTraceToString(ex));
-        return new ResponseEntity<>("서버 에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> handleException(Exception ex) {
+        log.info(StringUtil.getStackTraceToString(ex));
+        return new ResponseEntity<>(new ProcessResult<>(null, ProcessCode.HCO999.getProcCd()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

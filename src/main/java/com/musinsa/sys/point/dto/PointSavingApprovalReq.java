@@ -23,9 +23,6 @@ public class PointSavingApprovalReq  {
 	private Long amount;
 
 	@NotNull
-	@Pattern(
-			regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|[+-]\\d{2}:\\d{2})$"
-	)
 	private LocalDateTime logAt;
 
 	@NotNull(message = "포인트만료일을 입력하세요.")
