@@ -1,4 +1,4 @@
-package com.musinsa.sys.common.exception;
+package com.musinsa.sys.common.handler;
 
 import com.musinsa.sys.common.dto.ProcessResult;
 import com.musinsa.sys.common.enums.ProcessCode;
@@ -6,6 +6,7 @@ import com.musinsa.sys.common.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -14,6 +15,12 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    //@Valid를 통해 발견된 MethodArgumentNotValidException 처리
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ProcessResult<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        return new ProcessResult<>(null, ProcessCode.HCO998.getProcCd());
+    }
 
     // 404 Not Found 처리
     @ExceptionHandler(NoHandlerFoundException.class)

@@ -1,7 +1,6 @@
 package com.musinsa.sys.common.enums;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 public enum ProcessCode {
 
@@ -14,7 +13,8 @@ public enum ProcessCode {
     HCO005("fail", "HCO005", "만료일은 5년 미만이어야 합니다."),
     HCO006("fail", "HCO006", "사용된 거래가 조회되지 않습니다."),
     HCO009("fail", "HCO009", "취소할 수 있는 상태가 아닙니다."),
-    HCO999("fail", "HCO999", "시스템 에러가 발생했어요. 고객센터로 연락해주세요"),
+    HCO998("fail", "HCO998", "요청 파라미터가 유효하지 않습니다."),
+    HCO999("fail", "HCO999", "새로운 에러를 발견하셨어요. 고객센터 1600-4173(3번 하이픈페이)으로 연락해주세요"),
 
 
     /* 회원관리(Member) */
@@ -22,11 +22,11 @@ public enum ProcessCode {
     HMB002("fail", "HMB002", "비밀번호가 맞지 않아요");
 
 
-    private String sucsFalr;
-    private String procCd;
-    private String rsltMesg;
+    private final String sucsFalr;
+    private final String procCd;
+    private final String rsltMesg;
 
-    private ProcessCode(String sucsFalr, String procCd, String rsltMesg) {
+    ProcessCode(String sucsFalr, String procCd, String rsltMesg) {
         this.sucsFalr = sucsFalr;
         this.procCd = procCd;
         this.rsltMesg = rsltMesg;

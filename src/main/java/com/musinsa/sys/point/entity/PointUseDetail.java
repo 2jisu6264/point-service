@@ -1,5 +1,6 @@
 package com.musinsa.sys.point.entity;
 
+import com.musinsa.sys.common.util.DateUtil;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +30,13 @@ public class PointUseDetail {
 
     @Column(name = "created_at", length = 8, nullable = false)
     private LocalDateTime createdAt;
+
+    public static PointUseDetail from(PointLog pointLog) {
+        return PointUseDetail.builder()
+                .orderNo(pointLog.getOrderNo())
+                .usedAmount(pointLog.getAmount())
+                .createdAt(DateUtil.getLocalDateTimeWithNano())
+                .build();
+
+    }
 }

@@ -1,4 +1,4 @@
-package com.musinsa.sys.point.entity;
+package com.musinsa.sys.point.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
