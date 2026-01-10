@@ -1,5 +1,6 @@
 package com.musinsa.sys.point.entity;
 
+import com.musinsa.sys.common.util.DateUtil;
 import com.musinsa.sys.point.enums.PointLogType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,5 +36,15 @@ public class PointLog {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    public static PointLog from(Long memberId, Long amount, PointLogType pointLogType, LocalDateTime logAt) {
+        return PointLog.builder()
+                .logType(pointLogType)
+                .memberId(memberId)
+                .amount(amount)
+                .logAt(logAt)
+                .createdAt(DateUtil.getLocalDateTimeWithNano())
+                .build();
+    }
 
 }

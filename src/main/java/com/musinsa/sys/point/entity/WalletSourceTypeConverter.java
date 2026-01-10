@@ -1,5 +1,6 @@
 package com.musinsa.sys.point.entity;
 
+import com.musinsa.sys.point.enums.WalletSourceType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

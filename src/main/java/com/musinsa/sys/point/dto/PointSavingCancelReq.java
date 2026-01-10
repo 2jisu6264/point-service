@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class PointSavingCancelReq  {
-
-
 	@NotNull(message = "회원ID를 입력하세요.")
 	private Long memberId;
 

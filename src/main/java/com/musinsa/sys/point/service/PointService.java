@@ -1,7 +1,6 @@
 package com.musinsa.sys.point.service;
 
 import com.musinsa.sys.common.enums.ProcessCode;
-import com.musinsa.sys.common.util.StringUtil;
 import com.musinsa.sys.member.entity.Member;
 import com.musinsa.sys.member.repository.MemberRepository;
 import com.musinsa.sys.order.component.OrderNoGenerator;
@@ -23,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -40,193 +37,90 @@ public class PointService {
     private final PointUseDetailRepository pointUseDetailRepository;
 
     @Transactional
-    public PointResp savingApproval(PointSavingApprovalReq pointSavingApprovalReq) throws Exception {
-
-        PointResp pointResp = new PointResp();
-        PointWallet pointWallet = new PointWallet();
-
-        PointLog pointLog = new PointLog();
-        Member member;
+    public PointResp savingApproval(PointSavingApprovalReq pointSavingApprovalReq) {
 
         Long memberId = pointSavingApprovalReq.getMemberId();
         Long amount = pointSavingApprovalReq.getAmount();
 
-        //거래구분코드 확인
-        pointLog.setLogType(PointLogType.SAVING_APPROVAL);
-
         //회원 여부 확인
-        member = memberRepository.findByMemberIdForUpdate(memberId);
-        if (member == null) {
-            throw new ServiceException(ProcessCode.HMB001.getProcCd());
-        } else {
-            pointLog.setMemberId(member.getMemberId());
-        }
-
+        Member member = getMember(memberId);
         //한도체크 ( 1회 충전금액, 총보유금액, 만료일)
         validateSavingAmount(amount);
         validateBalanceLimit(member.getPointBalance(), amount);
         validateExpireDate(pointSavingApprovalReq.getExpireDate());
 
-        pointLog.setAmount(amount);
-        pointLog.setLogAt(pointSavingApprovalReq.getLogAt());
-
         //주문번호 체크
 /*        orderNo = orderNoGenerator.generateOrderNo();
         pointLog.setOrderNo(orderNo);*/
-        pointLog.setCreatedAt(LocalDateTime.now().withNano(0));
 
-        pointLogRepository.save(pointLog);
+        //pointLog 생성 후 save
+        pointLogRepository.save(PointLog.from(memberId, amount, PointLogType.SAVING_APPROVAL, pointSavingApprovalReq.getLogAt()));
 
-        Long totalBalance = member.getPointBalance() + amount;
-        member.setPointBalance(totalBalance);
-
+        //member 포인트 추가 후 save
+        member.addPointBalance(amount);
         memberRepository.save(member);
-        pointWallet.setMemberId(memberId);
-        pointWallet.setWalletStatus("00");
-        pointWallet.setSourceType(pointSavingApprovalReq.getSourceType());
-        pointWallet.setIssuedAmount(pointSavingApprovalReq.getAmount());
-        pointWallet.setUsedAmount(0L);
-        pointWallet.setExpiredAmount(0L);
-        pointWallet.setExpireDate(pointSavingApprovalReq.getExpireDate());
-        pointWallet.setCreatedAt(LocalDateTime.now().withNano(0));
+
+        // 포인트 지갑 생성 후 save
+        PointWallet pointWallet = PointWallet.from(memberId, pointSavingApprovalReq);
         pointWalletRepository.save(pointWallet);
 
-        pointResp.setMemberId(memberId);
-        pointResp.setWalletId(pointWallet.getWalletId());
-        pointResp.setAmount(amount);
-        return pointResp;
+        return new PointResp(memberId, pointWallet.getWalletId(), amount);
     }
 
     @Transactional
-    public PointResp savingCancel(PointSavingCancelReq pointSavingCancelReq) throws Exception {
-
-        PointResp pointResp = new PointResp();
-        PointLog pointLog = new PointLog();
-        Member member;
-
+    public PointResp savingCancel(PointSavingCancelReq pointSavingCancelReq) {
         Long memberId = pointSavingCancelReq.getMemberId();
         Long amount = pointSavingCancelReq.getAmount();
         Long walletId = pointSavingCancelReq.getWalletId();
-
-        //거래구분코드
-        pointLog.setLogType(PointLogType.SAVING_CANCEL);
-
         //회원 여부 확인
-        member = memberRepository.findByMemberIdForUpdate(memberId);
-        if (member == null) {
-            throw new ServiceException("HMB001");
-        } else {
-            pointLog.setMemberId(memberId);
-        }
+        Member member = getMember(memberId);
+        validatePointBalance(member, amount);
 
-        //취소할 거래 조회 (세분화)
-        PointWallet cancelWallet = pointWalletRepository.findByMemberIdAndWalletId(memberId, walletId);
-        if (cancelWallet == null) {
-            throw new ServiceException("HCO006");
-        } else if (cancelWallet.getUsedAmount() > 0) {
-            throw new ServiceException("HCO008");
-        } else if (!cancelWallet.getWalletStatus().equals("00")) {
-            throw new ServiceException("HCO009");
-        }
+        //pointLog 생성 후 save
+        pointLogRepository.save(PointLog.from(memberId, amount, PointLogType.SAVING_CANCEL, pointSavingCancelReq.getLogAt()));
 
-        pointLog.setAmount(amount);
-        pointLog.setLogAt(pointSavingCancelReq.getLogAt());
-        pointLog.setCreatedAt(LocalDateTime.now().withNano(0));
-
-        pointLogRepository.save(pointLog);
-
-        if (member.getPointBalance() < amount) {
-            throw new ServiceException("HCO010");
-        }
-
-        Long totalBalance = member.getPointBalance() - amount;
-        member.setPointBalance(totalBalance);
-
+        member.subsPointBalance(amount);
         memberRepository.save(member);
 
+        //취소할 거래 조회 (세분화)
+        PointWallet cancelWallet = getCancelWallet(memberId, walletId);
         cancelWallet.setWalletStatus("10");
         pointWalletRepository.save(cancelWallet);
 
-        pointResp.setMemberId(memberId);
-        pointResp.setWalletId(walletId);
-        pointResp.setAmount(walletId);
-        return pointResp;
+        return new PointResp(memberId, walletId, amount);
     }
 
     @Transactional
-    public PointResp useApproval(PointUseApprovalReq pointUseApprovalReq) throws Exception {
-
-        PointResp pointResp = new PointResp();
-        PointLog pointLog = new PointLog();
-        Member member;
-
+    public PointResp useApproval(PointUseApprovalReq pointUseApprovalReq) {
         Long memberId = pointUseApprovalReq.getMemberId();
         Long amount = pointUseApprovalReq.getAmount();
 
-        //거래구분코드
-        pointLog.setLogType(PointLogType.USE_APPROVAL);
-
         //회원 여부 확인
-        member = memberRepository.findByMemberIdForUpdate(memberId);
-        if (member == null) {
-            throw new ServiceException("HMB001");
-        } else {
-            pointLog.setMemberId(memberId);
-        }
+        Member member = getMember(memberId);
+        validatePointBalance(member, amount);
 
-        long pointBalance = member.getPointBalance();
-        if(pointBalance < amount) {
-            throw new ServiceException("HMB003");
-        }
-
+        PointLog pointLog = PointLog.from(memberId, amount, PointLogType.USE_APPROVAL, pointUseApprovalReq.getLogAt());
         //주문번호 체크
-        String orderNo = orderNoGenerator.generateOrderNo();
-        pointLog.setOrderNo(orderNo);
-
+        pointLog.setOrderNo(orderNoGenerator.generateOrderNo());
         //사용처리
         usePoint(pointLog);
-
-        pointLog.setAmount(amount);
-        pointLog.setLogAt(pointUseApprovalReq.getLogAt());
-        pointLog.setCreatedAt(LocalDateTime.now().withNano(0));
-
         pointLogRepository.save(pointLog);
 
-        if (member.getPointBalance() < amount) {
-            throw new ServiceException("HCO010");
-        }
-
-        Long totalBalance = member.getPointBalance() - amount;
-        member.setPointBalance(totalBalance);
-
+        member.subsPointBalance(amount);
         memberRepository.save(member);
 
-        pointResp.setMemberId(memberId);
-        pointResp.setAmount(totalBalance);
-        return pointResp;
+        return new PointResp(memberId, member.getPointBalance());
     }
 
     @Transactional
-    public PointResp useCancel(PointUseCancelReq pointUseCancelReq) throws Exception {
-
-        PointResp pointResp = new PointResp();
-        PointLog pointLog = new PointLog();
-        Member member;
+    public PointResp useCancel(PointUseCancelReq pointUseCancelReq) {
 
         Long memberId = pointUseCancelReq.getMemberId();
         Long amount = pointUseCancelReq.getAmount();
 
-        //거래구분코드
-        pointLog.setLogType(PointLogType.SAVING_CANCEL);
-
         //회원 여부 확인
-        member = memberRepository.findByMemberIdForUpdate(memberId);
-        if (member == null) {
-            throw new ServiceException("HMB001");
-        } else {
-            pointLog.setMemberId(memberId);
-        }
-
+        Member member = getMember(memberId);
+        validatePointBalance(member, amount);
         //취소할 거래 조회 (세분화)
    /*     PointWallet cancelWallet = pointWalletRepository.findByMemberIdAndWalletId(memberId, walletId);
         if (cancelWallet == null) {
@@ -237,33 +131,39 @@ public class PointService {
             throw new ServiceException("HCO009");
         }*/
 
-        pointLog.setAmount(amount);
-        pointLog.setLogAt(pointUseCancelReq.getLogAt());
-        pointLog.setCreatedAt(LocalDateTime.now().withNano(0));
-
-        pointLogRepository.save(pointLog);
-
-        if (member.getPointBalance() < amount) {
-            throw new ServiceException("HCO010");
-        }
-
-        Long totalBalance = member.getPointBalance() - amount;
-        member.setPointBalance(totalBalance);
-
+        pointLogRepository.save(PointLog.from(memberId, amount, PointLogType.SAVING_CANCEL, pointUseCancelReq.getLogAt()));
+        member.subsPointBalance(amount);
         memberRepository.save(member);
-
 /*
         cancelWallet.setWalletStatus("10");
         pointWalletRepository.save(cancelWallet);
 */
 
-        pointResp.setMemberId(memberId);
-        return pointResp;
+        return new PointResp(memberId);
+    }
+
+    private Member getMember(Long memberId) {
+        Member member = memberRepository.findByMemberIdForUpdate(memberId);
+        if (member == null)
+            throw new ServiceException(ProcessCode.HMB001.getProcCd());
+        return member;
+    }
+
+    private PointWallet getCancelWallet(Long memberId, Long walletId) {
+        PointWallet cancelWallet = pointWalletRepository.findByMemberIdAndWalletId(memberId, walletId);
+        if (cancelWallet == null) {
+            throw new ServiceException("HCO006");
+        } else if (cancelWallet.getUsedAmount() > 0) {
+            throw new ServiceException("HCO008");
+        } else if (!cancelWallet.getWalletStatus().equals("00")) {
+            throw new ServiceException("HCO009");
+        }
+        return cancelWallet;
     }
 
     private void validateSavingAmount(long amount) {
 
-        //null값체크하기
+        //null값 체크하기
         PointPolicy minPolicy = pointPolicyRepository.findByPolicyKey(PointPolicyKey.POINT_SAVING_MIN.name());
         PointPolicy maxPolicy = pointPolicyRepository.findByPolicyKey(PointPolicyKey.POINT_SAVING_MAX.name());
 
@@ -284,7 +184,7 @@ public class PointService {
         }
     }
 
-    private LocalDate validateExpireDate(LocalDate expireDate) {
+    private void validateExpireDate(LocalDate expireDate) {
         LocalDate today = LocalDate.now();
 
         if (expireDate.isBefore(today.plusDays(1))) {
@@ -293,15 +193,19 @@ public class PointService {
         if (!expireDate.isBefore(today.plusYears(5))) {
             throw new ServiceException("HCO005");
         }
-        return expireDate;
     }
 
-    public void usePoint(PointLog pointLog) throws Exception {
+    private void validatePointBalance(Member member, Long amount) {
+        if (member.getPointBalance() < amount) {
+            throw new ServiceException("HCO010");
+        }
+    }
+
+    public void usePoint(PointLog pointLog) {
 
         Long useAmt = pointLog.getAmount(); // 사용금액
 
-        List<PointWallet> usablePointList = new ArrayList<>();
-        usablePointList = pointWalletRepository.findUsableWallets(pointLog.getMemberId());
+        List<PointWallet> usablePointList = pointWalletRepository.findUsableWallets(pointLog.getMemberId());
 
         // 사용금액 각가의 거래건에 업데이트 처리
         for (PointWallet pointWallet : usablePointList) {
@@ -319,12 +223,6 @@ public class PointService {
                 break;
             }
         }
-
-        PointUseDetail pointUseDetail = new PointUseDetail();
-        pointUseDetail.setOrderNo(pointLog.getOrderNo());
-        pointUseDetail.setUsedAmount(pointLog.getAmount());
-        pointUseDetail.setCreatedAt((LocalDateTime.now().withNano(0)));
-
-        pointUseDetailRepository.save(pointUseDetail);
+        pointUseDetailRepository.save(PointUseDetail.from(pointLog));
     }
 }
