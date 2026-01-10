@@ -38,6 +38,20 @@ public class PointController {
 
         return ResultProcess.convertTo(pointResp);
     }
+    @RequestMapping(method = RequestMethod.POST, value = "/use/approval", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ProcessResult<PointResp> pointUseApproval(HttpServletRequest request, @Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) throws Exception {
+
+        PointResp pointResp = pointService.savingCancel(pointSavingCancelReq);
+
+        return ResultProcess.convertTo(pointResp);
+    }
+    @RequestMapping(method = RequestMethod.POST, value = "/use/cancel", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ProcessResult<PointResp> pointUseCancel(HttpServletRequest request, @Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) throws Exception {
+
+        PointResp pointResp = pointService.savingCancel(pointSavingCancelReq);
+
+        return ResultProcess.convertTo(pointResp);
+    }
 
 /*    @RequestMapping(method = RequestMethod.POST, value = "/expire")
     public ProcessResult<PointExpireResp> pointExpire(HttpServletRequest request, @Valid @RequestBody PointExpireReq pointExpireReq) throws Exception {

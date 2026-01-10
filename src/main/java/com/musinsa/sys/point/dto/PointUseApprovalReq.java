@@ -1,40 +1,32 @@
 package com.musinsa.sys.point.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.musinsa.sys.point.domain.WalletSourceType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Data
 public class PointUseApprovalReq  {
 
-	@NotNull(message = "이용사고유값이 비어있습니다.")
-	private Long uscoSno;
-	
-	@NotNull(message = "가맹점고유값이 비어있습니다.")
-	private Long mrstSno;
-	
-	@NotNull(message = "회원고유값이 비어있습니다.")
-	private Long mbrSno;  		// 회원 고유번호
-	
-	private String tmnNo; 		// 단말기 번호
+	@NotNull
+	private Long memberId;
 
-	@NotBlank(message = "거래구분코드값이 비어있습니다.")
-	private String trDscd;
+	@NotNull(message = "지급 유형값을 입력하세요.")
+	private WalletSourceType sourceType;
 
-	@NotBlank(message = "거래상세구분코드값이 비어있습니다.")
-	private String trDtlDscd;
+	@NotNull(message = "거래금액을 입력하세요.")
+	private Long amount;
 
-	private String stlmWyDcmtNo;// 결제수단식별번호
-	
-	@NotNull(message = "요청금액값이 비어있습니다.")
-	private Long rqsAmt;		// 요청금액
-	
-	@NotNull(message = "처리금액값이 비어있습니다.")
-	private Long pcsAmt;		// 처리금액
+	@NotNull(message = "날짜데이터를 입력하세요.")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime logAt;
 
-	private String trDt;		// 거래일자
-	private String trTm;		// 거래시각
-	private String trAprvNo;	// 거래승인번호
-
+	@NotNull(message = "포인트만료일을 입력하세요.")
+	@JsonFormat(pattern = "yyyyMMdd")
+	private LocalDate expireDate;
 }

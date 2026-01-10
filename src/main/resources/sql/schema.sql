@@ -27,7 +27,6 @@ CREATE TABLE point_log
 CREATE TABLE point_use_detail
 (
     use_id      BIGINT AUTO_INCREMENT COMMENT '거래 ID',
-    wallet_id   BIGINT      NOT NULL COMMENT '포인트 지갑 ID',
     order_no    VARCHAR(20) NOT NULL COMMENT '주문 번호',
     used_amount BIGINT      NOT NULL COMMENT '사용 금액',
     created_at  DATETIME(0) NOT NULL,

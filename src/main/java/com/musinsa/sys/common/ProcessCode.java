@@ -22,7 +22,8 @@ public enum ProcessCode {
 
 	/* 회원관리(Member) */
 	HMB001("fail", "HMB001", "회원 정보를 찾을 수 없습니다."),
-	HMB002("fail", "HMB002", "비밀번호가 맞지 않아요");
+	HMB002("fail", "HMB002", "비밀번호가 맞지 않아요"),
+	HMB003("fail", "HMB003", "회원 보유 잔액이 부족합니다.");
 
 
 	private String sucsFalr;
