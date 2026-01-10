@@ -34,14 +34,17 @@ public class PointController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/use/approval", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ProcessResult<PointResp> pointUseApproval(@Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) {
+    public ProcessResult<PointUseApprovalResp> pointUseApproval(@Valid @RequestBody PointUseApprovalReq pointUseApprovalReq) {
+
+        PointUseApprovalResp pointUseApprovalResp = pointService.useApproval(pointUseApprovalReq);
 
         return new ProcessResult<>(pointUseApprovalResp, ProcessCode.HCO000.getProcCd());
     }
     @RequestMapping(method = RequestMethod.POST, value = "/use/cancel", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ProcessResult<PointResp> pointUseCancel(@Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) {
+    public ProcessResult<PointResp> pointUseCancel(@Valid @RequestBody PointUseCancelReq pointUseCancelReq) {
 
         PointResp pointResp = pointService.useCancel(pointUseCancelReq);
+
         return new ProcessResult<>(pointResp, ProcessCode.HCO000.getProcCd());
     }
 

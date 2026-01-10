@@ -36,7 +36,7 @@ public class PointLog {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public static PointLog from(Long memberId, Long amount, PointLogType pointLogType, LocalDateTime logAt) {
+    public static PointLog from(Long memberId, Long amount, String pointLogType, LocalDateTime logAt) {
         return PointLog.builder()
                 .logType(pointLogType)
                 .memberId(memberId)

@@ -2,6 +2,7 @@ package com.musinsa.sys.common.handler;
 
 import com.musinsa.sys.common.dto.ProcessResult;
 import com.musinsa.sys.common.enums.ProcessCode;
+import com.musinsa.sys.common.exception.ServiceException;
 import com.musinsa.sys.common.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

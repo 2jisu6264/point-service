@@ -15,7 +15,7 @@ public class PointResp {
     }
 
     public PointResp(Long memberId, Long amount) {
-        new PointResp(memberId);
+        this(memberId);
         this.amount = amount;
     }
 
