@@ -1,4 +1,4 @@
-package com.musinsa.sys.member.domain;
+package com.musinsa.sys.member.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

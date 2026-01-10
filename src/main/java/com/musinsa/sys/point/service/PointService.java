@@ -1,12 +1,13 @@
 package com.musinsa.sys.point.service;
 
-import com.musinsa.sys.common.sequence.OrderNoGenerator;
-import com.musinsa.sys.member.domain.Member;
+import com.musinsa.sys.common.enums.ProcessCode;
+import com.musinsa.sys.order.component.OrderNoGenerator;
+import com.musinsa.sys.member.entity.Member;
 import com.musinsa.sys.member.repository.MemberRepository;
-import com.musinsa.sys.point.domain.PointLog;
-import com.musinsa.sys.point.domain.PointLogType;
-import com.musinsa.sys.point.domain.PointPolicyKey;
-import com.musinsa.sys.point.domain.PointWallet;
+import com.musinsa.sys.point.entity.PointLog;
+import com.musinsa.sys.point.enums.PointLogType;
+import com.musinsa.sys.point.enums.PointPolicyKey;
+import com.musinsa.sys.point.entity.PointWallet;
 import com.musinsa.sys.point.dto.PointResp;
 import com.musinsa.sys.point.dto.PointSavingApprovalReq;
 import com.musinsa.sys.point.repository.PointPolicyRepository;
@@ -43,7 +44,7 @@ public class PointService {
 
         //거래구분코드 확인
         if (pointSavingApprovalReq.getLogType() != PointLogType.SAVING_APPROVAL){
-            throw new ServiceException("HCO001");
+            throw new ServiceException(ProcessCode.HCO001.getProcCd());
         }else{
             pointLog.setLogType(PointLogType.SAVING_APPROVAL);
         }
@@ -51,7 +52,7 @@ public class PointService {
         //회원 여부 확인
         member = memberRepository.findByMemberId(pointSavingApprovalReq.getMemberId());
         if(member == null){
-            throw new ServiceException("HMB001");
+            throw new ServiceException(ProcessCode.HMB001.getProcCd());
         }else{
             pointLog.setMemberId(member.getMemberId());
         }

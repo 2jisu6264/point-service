@@ -1,6 +1,6 @@
-package com.musinsa.sys.common.sequence;
+package com.musinsa.sys.order.repository;
 
-import com.musinsa.sys.member.domain.Member;
+import com.musinsa.sys.order.entity.OrderSequenceLog;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

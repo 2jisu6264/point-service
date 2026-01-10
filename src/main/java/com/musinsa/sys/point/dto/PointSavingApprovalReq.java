@@ -1,7 +1,7 @@
 package com.musinsa.sys.point.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.musinsa.sys.point.domain.PointLogType;
+import com.musinsa.sys.point.enums.PointLogType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

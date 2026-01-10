@@ -1,5 +1,6 @@
-package com.musinsa.sys.point.domain;
+package com.musinsa.sys.point.entity;
 
+import com.musinsa.sys.point.enums.PointLogType;
 import jakarta.persistence.*;
 import lombok.*;
 

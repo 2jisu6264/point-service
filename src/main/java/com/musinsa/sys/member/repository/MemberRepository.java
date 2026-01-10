@@ -1,6 +1,6 @@
 package com.musinsa.sys.member.repository;
 
-import com.musinsa.sys.member.domain.Member;
+import com.musinsa.sys.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

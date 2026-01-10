@@ -1,5 +1,5 @@
-package com.musinsa.sys.point.domain;
-import com.musinsa.sys.point.domain.PointLogType;
+package com.musinsa.sys.point.entity;
+import com.musinsa.sys.point.enums.PointLogType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

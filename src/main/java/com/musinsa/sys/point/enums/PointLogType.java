@@ -1,4 +1,4 @@
-package com.musinsa.sys.point.domain;
+package com.musinsa.sys.point.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,6 @@ public enum PointLogType {
     private static final Map<String, PointLogType> CODE_MAP =
             Arrays.stream(values())
                     .collect(Collectors.toMap(PointLogType::getCode, v -> v));
-
     public static PointLogType from(String code) {
         PointLogType type = CODE_MAP.get(code);
         if (type == null) {

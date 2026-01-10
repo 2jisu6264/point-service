@@ -1,4 +1,4 @@
-package com.musinsa.sys.point.domain;
+package com.musinsa.sys.point.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

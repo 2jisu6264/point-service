@@ -1,13 +1,13 @@
-package com.musinsa.sys.common.sequence;
+package com.musinsa.sys.order.component;
 
+import com.musinsa.sys.order.entity.OrderSequenceLog;
+import com.musinsa.sys.order.repository.OrderSequenceRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import javax.sql.DataSource;
 
 @Component
 public class OrderNoGenerator {

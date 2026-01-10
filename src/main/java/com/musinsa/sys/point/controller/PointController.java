@@ -1,9 +1,7 @@
 package com.musinsa.sys.point.controller;
 
-import com.musinsa.sys.common.ProcessResult;
-import com.musinsa.sys.common.ResultProcess;
-import com.musinsa.sys.point.dto.PointExpireReq;
-import com.musinsa.sys.point.dto.PointExpireResp;
+import com.musinsa.sys.common.dto.ProcessResult;
+import com.musinsa.sys.common.enums.ProcessCode;
 import com.musinsa.sys.point.dto.PointResp;
 import com.musinsa.sys.point.dto.PointSavingApprovalReq;
 import com.musinsa.sys.point.service.PointService;
@@ -22,13 +20,12 @@ public class PointController {
 
     @Autowired
     private PointService pointService;
-    
+
     @RequestMapping(method = RequestMethod.POST, value = "/saving/approval", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ProcessResult<PointResp> pointSavingApproval(HttpServletRequest request, @Valid @RequestBody PointSavingApprovalReq pointSavingApprovalReq) throws Exception {
-
         PointResp pointSavingApprovalResp = pointService.savingApproval(pointSavingApprovalReq);
-
-        return ResultProcess.convertTo(pointSavingApprovalResp);
+        ProcessResult<PointResp> processResult = new ProcessResult<>(pointSavingApprovalResp, ProcessCode.HCO001.getProcCd());
+        return processResult;
     }
 /*    @RequestMapping(method = RequestMethod.POST, value = "/expire")
     public ProcessResult<PointExpireResp> pointExpire(HttpServletRequest request, @Valid @RequestBody PointExpireReq pointExpireReq) throws Exception {
@@ -37,5 +34,5 @@ public class PointController {
 
         return ResultProcess.convertTo(pointExpireResp);
     }*/
-    
+
 }
