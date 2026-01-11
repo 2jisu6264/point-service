@@ -46,4 +46,14 @@ public class PointLog {
                 .build();
     }
 
+    public static PointLog from(Long memberId, String orderNo, Long amount, String pointLogType, LocalDateTime logAt) {
+        return PointLog.builder()
+                .logType(pointLogType)
+                .memberId(memberId)
+                .orderNo(orderNo)
+                .amount(amount)
+                .logAt(logAt)
+                .createdAt(DateUtil.getLocalDateTimeWithNano())
+                .build();
+    }
 }

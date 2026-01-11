@@ -1,5 +1,6 @@
 package com.musinsa.sys.point.entity;
 
+import com.musinsa.sys.common.constants.Val;
 import com.musinsa.sys.common.util.DateUtil;
 import com.musinsa.sys.point.dto.PointSavingApprovalReq;
 import com.musinsa.sys.point.enums.WalletSourceType;
@@ -47,15 +48,15 @@ public class PointWallet {
     @Column(name = "created_at", length = 8, nullable = false)
     private LocalDateTime createdAt;
 
-    public static PointWallet from(Long memberId, PointSavingApprovalReq pointSavingApprovalReq) {
+    public static PointWallet from(Long memberId, WalletSourceType sourceType, Long amount, LocalDate expireDt) {
         return PointWallet.builder()
                 .memberId(memberId)
-                .walletStatus("00")
-                .sourceType(pointSavingApprovalReq.getSourceType())
-                .issuedAmount(pointSavingApprovalReq.getAmount())
+                .walletStatus(Val.NORMAL)
+                .sourceType(sourceType)
+                .issuedAmount(amount)
                 .usedAmount(0L)
                 .expiredAmount(0L)
-                .expireDate(pointSavingApprovalReq.getExpireDate())
+                .expireDate(expireDt)
                 .createdAt(DateUtil.getLocalDateTimeWithNano())
                 .build();
     }

@@ -3,7 +3,6 @@ package com.musinsa.sys.point.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.musinsa.sys.point.enums.WalletSourceType;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.time.LocalDate;

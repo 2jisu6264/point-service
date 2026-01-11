@@ -129,7 +129,7 @@ public class StringUtil {
                 }
             }else{
                 try{
-                    sb.append(str.substring(0, len));
+                    sb.append(str, 0, len);
                 }catch(StringIndexOutOfBoundsException e){
                     for(i=0;i<len;i++){ sb.append("?"); }
                 }

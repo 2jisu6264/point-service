@@ -17,7 +17,9 @@ public enum ProcessCode {
     HCO009("fail", "HCO009", "이미 사용되어 취소가 불가능한 거래 입니다."),
     HCO010("fail", "HCO010", "취소할 잔액이 부족합니다."),
     HCO011("fail", "HCO011", "지급 유형 코드가 잘못되었습니다."),
-    HCO012("fail", "HCO011", "취소할 거래가 없습니다."),
+    HCO012("fail", "HCO012", "취소할 거래가 없습니다."),
+    HCO013("fail", "HCO013", "포인트 잔액이 부족합니다."),
+    HCO014("fail", "HCO014", "취소 할 금액이 초과했습니다."),
     HCO998("fail", "HCO998", "요청 파라미터가 유효하지 않습니다."),
     HCO999("fail", "HCO999", "새로운 에러를 발견하셨어요. 고객센터 1600-4173(3번 하이픈페이)으로 연락해주세요"),
 
@@ -28,11 +30,11 @@ public enum ProcessCode {
     HMB003("fail", "HMB003", "회원 보유 잔액이 부족합니다.");
 
 
-    private String sucsFalr;
-    private String procCd;
-    private String rsltMesg;
+    private final String sucsFalr;
+    private final String procCd;
+    private final String rsltMesg;
 
-    private ProcessCode(String sucsFalr, String procCd, String rsltMesg) {
+    ProcessCode(String sucsFalr, String procCd, String rsltMesg) {
         this.sucsFalr = sucsFalr;
         this.procCd = procCd;
         this.rsltMesg = rsltMesg;

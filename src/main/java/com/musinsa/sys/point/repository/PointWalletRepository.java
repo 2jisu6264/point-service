@@ -31,7 +31,7 @@ public interface PointWalletRepository extends JpaRepository<PointWallet, Long> 
             + "AND used_amount != 0 "
             + "AND member_id = :memberId "
             + "ORDER BY expire_date desc ", nativeQuery = true)
-    public List<PointWallet> findCancelWallets(@Param("memberId") Long memberId);
+    List<PointWallet> findCancelWallets(@Param("memberId") Long memberId);
 
 }
 

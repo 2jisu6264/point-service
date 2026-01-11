@@ -21,29 +21,29 @@ public class PointController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saving/approval", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ProcessResult<PointResp> pointSavingApproval(@Valid @RequestBody PointSavingApprovalReq pointSavingApprovalReq) {
-        PointResp pointResp = pointService.savingApproval(pointSavingApprovalReq);
+    public ProcessResult<PointResp> approveSaving(@Valid @RequestBody PointSavingApprovalReq pointSavingApprovalReq) {
+        PointResp pointResp = pointService.approveSaving(pointSavingApprovalReq);
         return new ProcessResult<>(pointResp, ProcessCode.HCO000.getProcCd());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saving/cancel", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ProcessResult<PointResp> pointSavingApproval(@Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) {
+    public ProcessResult<PointResp> cancelSaving(@Valid @RequestBody PointSavingCancelReq pointSavingCancelReq) {
 
-        PointResp pointResp = pointService.savingCancel(pointSavingCancelReq);
+        PointResp pointResp = pointService.cancelSaving(pointSavingCancelReq);
         return new ProcessResult<>(pointResp, ProcessCode.HCO000.getProcCd());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/use/approval", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ProcessResult<PointUseApprovalResp> pointUseApproval(@Valid @RequestBody PointUseApprovalReq pointUseApprovalReq) {
+    public ProcessResult<PointUseApprovalResp> approveUsage(@Valid @RequestBody PointUseApprovalReq pointUseApprovalReq) {
 
         PointUseApprovalResp pointUseApprovalResp = pointService.useApproval(pointUseApprovalReq);
 
         return new ProcessResult<>(pointUseApprovalResp, ProcessCode.HCO000.getProcCd());
     }
     @RequestMapping(method = RequestMethod.POST, value = "/use/cancel", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ProcessResult<PointResp> pointUseCancel(@Valid @RequestBody PointUseCancelReq pointUseCancelReq) {
+    public ProcessResult<PointResp> cancelUsage(@Valid @RequestBody PointUseCancelReq pointUseCancelReq) {
 
-        PointResp pointResp = pointService.useCancel(pointUseCancelReq);
+        PointResp pointResp = pointService.processRefund(pointUseCancelReq);
 
         return new ProcessResult<>(pointResp, ProcessCode.HCO000.getProcCd());
     }
